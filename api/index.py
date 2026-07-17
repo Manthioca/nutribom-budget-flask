@@ -72,7 +72,7 @@ class PDFWeb(FPDF):
         self.cell(0, 6, self.cliente['nome'].upper(), ln=1)
         
         self.set_font("Helvetica", '', 9)
-        self.cell(100, 5, f"Documento: {self.cliente['cnpj']}", 0, 0)
+        self.cell(100, 5, f"CNPJ/CPF: {self.cliente['cnpj']}", 0, 0)
         self.cell(0, 5, f"Telefone: {self.cliente['tel']}", 0, 1, 'R')
         self.cell(0, 5, f"Data da Emissão: {datetime.now().strftime('%d/%m/%Y %H:%M')}", ln=1)
         self.ln(3)
