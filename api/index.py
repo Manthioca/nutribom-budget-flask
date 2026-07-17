@@ -152,7 +152,7 @@ def gerar_pdf():
             
         pdf.cell(20, rh, item_id, 0, 0, 'C', True)
         pdf.multi_cell(85, h, text, 0, 'L', True)
-        pdf.set_xy(pdf.get_x() + 105, cy)
+        pdf.set_xy(115, cy)
         
         # Renderiza os dados numéricos e as strings
         pdf.cell(15, rh, f"{item_qtd:.2f}", 0, 0, 'C', True)
