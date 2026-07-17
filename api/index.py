@@ -19,7 +19,6 @@ USUARIOS = {
 }
 
 # --- IMAGEM LOGO EM STRING BASE64 (À PROVA DE ERRO DE CAMINHO) ---
-# Uma logo em formato de pixels mínimos para garantir que o PDF seja gerado mesmo sem arquivos locais.
 LOGO_BASE64_PADRAO = (
     "iVBORw0KGgoAAAANSUhEUgAAAGQAAAAyCAMAAACg138FAAAABGdBTUEAALGPC/xhBQAAACBjSFJN"
     "AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAX1BMVEUAAADy8vL////y8vLy"
@@ -39,27 +38,13 @@ class PDFWeb(FPDF):
         self.desconto = desconto
 
     def header(self):
-        # Tenta carregar a imagem física da pasta public.
-        # Se falhar (como costuma ocorrer na Vercel), usa a logo de fallback em memória para não travar o servidor.
-        caminho_base = os.path.dirname(os.path.abspath(__file__))
-        logo_path = os.path.abspath(os.path.join(caminho_base, "..", "public", "logo.png"))
-        
-        desenhou_imagem = False
-        if os.path.exists(logo_path):
-            try:
-                self.image(logo_path, 10, 8, 38)
-                desenhou_imagem = True
-            except Exception as e:
-                print(f"Erro ao ler imagem local: {e}")
-
-        if not desenhou_imagem:
-            try:
-                # Fallback: reconstrói a imagem diretamente de dados binários em memória
-                img_data = base64.b64decode(LOGO_BASE64_PADRAO)
-                img_io = io.BytesIO(img_data)
-                self.image(img_io, 10, 8, 38, format="PNG")
-            except Exception as e:
-                print(f"Erro ao carregar imagem em memória: {e}")
+        # Usa exclusivamente o Base64 na Vercel para eliminar qualquer erro de busca de arquivo local
+        try:
+            img_data = base64.b64decode(LOGO_BASE64_PADRAO)
+            img_io = io.BytesIO(img_data)
+            self.image(img_io, 10, 8, 38, format="PNG")
+        except Exception as e:
+            print(f"Erro ao carregar imagem em memória: {e}")
         
         self.set_font("Helvetica", 'B', 15)
         self.set_text_color(40, 40, 40)
@@ -177,8 +162,9 @@ def gerar_pdf():
     pdf.set_font("Helvetica", '', 10)
     pdf.multi_cell(0, 6, obs if obs else "Nenhuma.")
     
-    pdf_out = io.BytesIO()
-    pdf_out.write(pdf.output(dest='S').encode('latin-1'))
+    # --- CORREÇÃO DA GERAÇÃO DO PDF PARA FPDF2 ---
+    # fpdf2 gera bytes diretamente, sem necessidade de decodificar como 'latin-1'
+    pdf_out = io.BytesIO(pdf.output())
     pdf_out.seek(0)
     
     return send_file(
