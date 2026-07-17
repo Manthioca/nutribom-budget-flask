@@ -38,7 +38,7 @@ class PDFWeb(FPDF):
         self.desconto = desconto
 
     def header(self):
-        # Usa exclusivamente o Base64 na Vercel para eliminar qualquer erro de busca de arquivo local
+        # Usa exclusivamente o Base64 na Vercel para eliminar erros de caminhos de arquivos locais
         try:
             img_data = base64.b64decode(LOGO_BASE64_PADRAO)
             img_io = io.BytesIO(img_data)
@@ -72,6 +72,7 @@ class PDFWeb(FPDF):
         self.cell(0, 6, self.cliente['nome'].upper(), ln=1)
         
         self.set_font("Helvetica", '', 9)
+        # Exibe "CNPJ/CPF" ao invés de "Documento"
         self.cell(100, 5, f"CNPJ/CPF: {self.cliente['cnpj']}", 0, 0)
         self.cell(0, 5, f"Telefone: {self.cliente['tel']}", 0, 1, 'R')
         self.cell(0, 5, f"Data da Emissão: {datetime.now().strftime('%d/%m/%Y %H:%M')}", ln=1)
@@ -121,21 +122,45 @@ def gerar_pdf():
     t_bruto = 0
     for idx, i in enumerate(itens):
         pdf.set_fill_color(255) if idx % 2 == 0 else pdf.set_fill_color(252)
-        h, text = 6, str(i['nome'])
+        
+        # Lê os campos tratando letras maiúsculas e minúsculas com segurança para evitar vazios
+        item_id = str(i.get('id', i.get('ID', '')))
+        item_nome = str(i.get('nome', i.get('NOME', '')))
+        item_un = str(i.get('un', i.get('UN', '')))
+        
+        try:
+            item_qtd = float(str(i.get('qtd', i.get('QTD', 1))).replace(',', '.'))
+        except:
+            item_qtd = 1.0
+            
+        try:
+            item_preco = float(str(i.get('preco', i.get('PRECO', 0))).replace(',', '.'))
+        except:
+            item_preco = 0.0
+            
+        try:
+            item_total = float(str(i.get('total', i.get('TOTAL', 0))).replace(',', '.'))
+        except:
+            item_total = item_qtd * item_preco
+
+        h, text = 6, item_nome
         rh = math.ceil(pdf.get_string_width(text) / 83) * h
         cy = pdf.get_y()
         if cy + rh > 270: 
             pdf.add_page()
             pdf.draw_table_header()
-        pdf.cell(20, rh, str(i['id']), 0, 0, 'C', True)
+            
+        pdf.cell(20, rh, item_id, 0, 0, 'C', True)
         pdf.multi_cell(85, h, text, 0, 'L', True)
         pdf.set_xy(pdf.get_x() + 105, cy)
-        pdf.cell(15, rh, f"{float(i['qtd']):.2f}", 0, 0, 'C', True)
-        pdf.cell(15, rh, str(i['un']), 0, 0, 'C', True)
-        pdf.cell(25, rh, f"R$ {float(i['preco']):.2f}", 0, 0, 'R', True)
-        total_item = float(i['total'])
-        pdf.cell(30, rh, f"R$ {total_item:.2f}", 0, 1, 'R', True)
-        t_bruto += total_item
+        
+        # Renderiza os dados numéricos e as strings
+        pdf.cell(15, rh, f"{item_qtd:.2f}", 0, 0, 'C', True)
+        pdf.cell(15, rh, item_un, 0, 0, 'C', True)
+        pdf.cell(25, rh, f"R$ {item_preco:.2f}", 0, 0, 'R', True)
+        pdf.cell(30, rh, f"R$ {item_total:.2f}", 0, 1, 'R', True)
+        
+        t_bruto += item_total
 
     pdf.ln(5)
     pdf.set_x(130)
@@ -162,8 +187,7 @@ def gerar_pdf():
     pdf.set_font("Helvetica", '', 10)
     pdf.multi_cell(0, 6, obs if obs else "Nenhuma.")
     
-    # --- CORREÇÃO DA GERAÇÃO DO PDF PARA FPDF2 ---
-    # fpdf2 gera bytes diretamente, sem necessidade de decodificar como 'latin-1'
+    # fpdf2 gera bytes em formato direto na memória
     pdf_out = io.BytesIO(pdf.output())
     pdf_out.seek(0)
     
