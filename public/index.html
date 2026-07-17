@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutribom - Orçamentos Premium</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f7f6;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .login-container {
+            max-width: 400px;
+            margin-top: 8%;
+        }
+        
+        .app-container {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .navbar-custom {
+            background-color: #1a2a3a;
+            color: white;
+        }
+        
+        .card-header-custom {
+            background-color: #1a2a3a;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .resultado-busca {
+            max-height: 250px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            background: white;
+        }
+        
+        .resultado-item {
+            cursor: pointer;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .resultado-item:hover {
+            background-color: #e9ecef;
+        }
+        
+        .admin-section {
+            display: none;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+        }
+        
+        .logo-login {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+        
+        .logo-nav {
+            max-height: 45px;
+            width: auto;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TELA DE LOGIN -->
+    <div class="container login-container" id="tela-login">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <img src="logo.png" alt="Nutribom Logo" class="logo-login" onerror="this.style.display='none'">
+                    <h3>NUTRIBOM</h3>
+                    <p class="text-muted">Painel de Orçamentos</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Usuário</label>
+                    <input type="text" id="login-usuario" class="form-control" placeholder="Seu usuário">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Senha</label>
+                    <input type="password" id="login-senha" class="form-control" placeholder="Sua senha">
+                </div>
+                <button class="btn btn-primary w-100" style="background-color: #1a2a3a;" onclick="fazerLogin()">Entrar</button>
+                <div class="text-danger mt-3 text-center" id="login-erro"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELA DO SISTEMA -->
+    <div class="app-container" id="tela-sistema">
+        <nav class="navbar navbar-custom px-4 py-2 shadow mb-4 d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <img src="logo.png" alt="Logo" class="logo-nav" onerror="this.style.display='none'">
+                <h4 class="m-0 d-inline-block align-middle">SISTEMA DE ORÇAMENTOS WEB</h4>
+            </div>
+            <div>
+                <span id="status-usuario" class="badge bg-secondary me-2"></span>
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">Sair</button>
+            </div>
+        </nav>
+
+        <div class="container-fluid px-4">
+            <!-- SESSÃO DO ADMINISTRADOR (IMPORTAÇÃO DE PRODUTOS) -->
+            <div class="card mb-4 admin-section shadow-sm" id="painel-admin">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <h5 class="m-0 text-warning-dark">Painel de Administração</h5>
+                        <p class="m-0 text-muted small">Importe o arquivo <strong>ProdutosSPV (12).txt</strong> para atualizar os preços imediatamente.</p>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <input type="file" id="arquivo-txt" class="form-control form-control-sm" accept=".txt">
+                        <button class="btn btn-warning btn-sm fw-bold" onclick="importarArquivo()">ATUALIZAR PREÇOS</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Coluna Esquerda: Dados -->
+                <div class="col-md-4">
+                    <div class="card shadow mb-3">
+                        <div class="card-header card-header-custom">Meus Dados (Fixo)</div>
+                        <div class="card-body">
+                            <div class="mb-2">
+                                <label class="small text-muted">Empresa</label>
+                                <input type="text" id="emp-nome" class="form-control form-control-sm" value="Nutribom Alimentos LTDA">
+                            </div>
+                            <div class="mb-2">
+                                <label class="small text-muted">CNPJ</label>
+                                <input type="text" id="emp-cnpj" class="form-control form-control-sm" value="13.165.165/0001-41">
+                            </div>
+                            <div class="mb-2">
+                                <label class="small text-muted">Contato</label>
+                                <input type="text" id="emp-tel" class="form-control form-control-sm" value="3031-9321">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow mb-3">
+                        <div class="card-header card-header-custom">Dados do Cliente</div>
+                        <div class="card-body">
+                            <div class="mb-2">
+                                <label class="small text-muted">Nome do Cliente</label>
+                                <input type="text" id="cli-nome" class="form-control form-control-sm">
+                            </div>
+                            <div class="mb-2">
+                                <label class="small text-muted">CNPJ/CPF</label>
+                                <input type="text" id="cli-cnpj" class="form-control form-control-sm">
+                            </div>
+                            <div class="mb-2">
+                                <label class="small text-muted">Telefone</label>
+                                <input type="text" id="cli-tel" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow mb-3">
+                        <div class="card-header card-header-custom">Pesquisar Produtos</div>
+                        <div class="card-body">
+                            <!-- Input de pesquisa com busca por Código ou Nome -->
+                            <input type="text" id="busca-prod" class="form-control mb-2" placeholder="Pesquise por código ou nome..." oninput="buscarProdutos()">
+                            <div class="resultado-busca" id="lista-busca"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita: Carrinho e Fechamento -->
+                <div class="col-md-8">
+                    <div class="card shadow mb-3">
+                        <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+                            <span>Itens do Orçamento</span>
+                            <div class="d-flex gap-2 align-items-center">
+                                <input type="number" id="item-qtd" class="form-control form-control-sm" style="width: 70px;" value="1" min="0.01" step="0.01">
+                                <select id="item-un" class="form-select form-select-sm" style="width: 100px;">
+                                    <option value="Un/Kg">Un/Kg</option>
+                                    <option value="Gramas">Gramas</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="table table-striped m-0" id="tabela-orcamento">
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Descrição</th>
+                                        <th>Qtd</th>
+                                        <th>Un</th>
+                                        <th>P. Unit</th>
+                                        <th>Total</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card shadow mb-3">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-4">
+                                    <label class="small text-muted">Observações</label>
+                                    <input type="text" id="orc-obs" class="form-control" value="Pagamento à vista / PIX">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="small text-muted">Desconto (%)</label>
+                                    <input type="number" id="orc-desc" class="form-control" value="0" min="0" max="100" oninput="calcularTotalGeral()">
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <h3 class="m-0 text-primary" id="total-geral-txt">TOTAL: R$ 0,00</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-success btn-lg w-100 py-3 shadow" onclick="gerarPDF()">GERAR PDF ORÇAMENTO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let itensSelecionados = [];
+        let bancoProdutos = [];
+        let usuarioAtual = "";
+
+        // Carrega produtos salvos
+        if (localStorage.getItem('banco_produtos')) {
+            bancoProdutos = JSON.parse(localStorage.getItem('banco_produtos'));
+        }
+
+        function fazerLogin() {
+            const usuario = document.getElementById('login-usuario').value;
+            const senha = document.getElementById('login-senha').value;
+
+            fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        usuario,
+                        senha
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.sucesso) {
+                        usuarioAtual = usuario;
+                        document.getElementById('tela-login').style.display = 'none';
+                        document.getElementById('tela-sistema').style.display = 'block';
+                        document.getElementById('status-usuario').innerText = `Logado como: ${usuario}`;
+
+                        if (usuario === 'lucasspv') {
+                            document.getElementById('painel-admin').style.display = 'flex';
+                        } else {
+                            document.getElementById('painel-admin').style.display = 'none';
+                        }
+                        buscarProdutos();
+                    } else {
+                        document.getElementById('login-erro').innerText = data.mensagem;
+                    }
+                })
+                .catch(() => {
+                    document.getElementById('login-erro').innerText = "Erro ao conectar ao servidor.";
+                });
+        }
+
+        function logout() {
+            usuarioAtual = "";
+            document.getElementById('tela-login').style.display = 'block';
+            document.getElementById('tela-sistema').style.display = 'none';
+        }
+
+        function importarArquivo() {
+            const input = document.getElementById('arquivo-txt');
+            if (input.files.length === 0) {
+                alert("Por favor, selecione o arquivo de produtos primeiro!");
+                return;
+            }
+
+            const arquivo = input.files[0];
+            const leitor = new FileReader();
+
+            leitor.onload = function(e) {
+                const texto = e.target.result;
+                const linhas = texto.split('\n');
+                const novosProdutos = [];
+
+                linhas.forEach(linha => {
+                    if (!linha.trim()) return;
+                    const colunas = linha.split(';');
+                    if (colunas.length >= 9) {
+                        const id = colunas[0].trim();
+                        const nome = colunas[2].trim();
+                        let precoStr = colunas[8].trim().replace(',', '.');
+                        const preco = parseFloat(precoStr) || 0.0;
+
+                        novosProdutos.push({
+                            ID: id,
+                            Nome: nome,
+                            Preco: preco
+                        });
+                    }
+                });
+
+                if (novosProdutos.length > 0) {
+                    bancoProdutos = novosProdutos;
+                    localStorage.setItem('banco_produtos', JSON.stringify(bancoProdutos));
+                    alert(`Sucesso! ${novosProdutos.length} produtos carregados e salvos no sistema.`);
+                    buscarProdutos();
+                } else {
+                    alert("Nenhum produto válido encontrado no arquivo. Verifique se o formato está correto.");
+                }
+            };
+
+            leitor.readAsText(arquivo, 'ISO-8859-1');
+        }
+
+        // Função de busca inteligente com tratamento para zeros à esquerda nos códigos
+        function buscarProdutos() {
+            const termoBuscaRaw = document.getElementById('busca-prod').value.trim();
+            const container = document.getElementById('lista-busca');
+            container.innerHTML = '';
+
+            if (bancoProdutos.length === 0) {
+                container.innerHTML = '<div class="p-3 text-danger text-center">Nenhum produto no sistema. Use o Painel de Administrador para importar sua lista.</div>';
+                return;
+            }
+
+            if (!termoBuscaRaw) {
+                // Exibe os primeiros 30 produtos se o campo estiver vazio
+                bancoProdutos.slice(0, 30).forEach(p => renderProdutoItem(p, container));
+                return;
+            }
+
+            // Transforma o termo de busca para comparação numérica caso seja só números (ex: "271" -> 271)
+            const buscaNumero = parseInt(termoBuscaRaw, 10);
+            const isNumerico = !isNaN(buscaNumero) && /^\d+$/.test(termoBuscaRaw);
+
+            const termos = termoBuscaRaw.toUpperCase().split(' ');
+
+            const filtrados = bancoProdutos.filter(p => {
+                // 1. Verificação por Código (Ignorando zeros à esquerda se a busca for numérica)
+                if (isNumerico) {
+                    const idNumero = parseInt(p.ID, 10);
+                    if (idNumero === buscaNumero) {
+                        return true;
+                    }
+                }
+
+                // Comparação exata ou parcial do texto do ID
+                if (p.ID.includes(termoBuscaRaw)) {
+                    return true;
+                }
+
+                // 2. Verificação por Nome (Todos os termos precisam estar inclusos)
+                const nomeUpper = p.Nome.toUpperCase();
+                return termos.every(termo => nomeUpper.includes(termo));
+            }).slice(0, 30);
+
+            if (filtrados.length === 0) {
+                container.innerHTML = '<div class="p-3 text-muted text-center">Nenhum produto encontrado.</div>';
+                return;
+            }
+
+            filtrados.forEach(p => renderProdutoItem(p, container));
+        }
+
+        function renderProdutoItem(p, container) {
+            const div = document.createElement('div');
+            div.className = 'resultado-item';
+            div.innerText = `${p.ID} - ${p.Nome} - R$ ${p.Preco.toFixed(2)}`;
+            div.onclick = () => selecionarProduto(p);
+            container.appendChild(div);
+        }
+
+        function selecionarProduto(p) {
+            const qtd = parseFloat(document.getElementById('item-qtd').value);
+            const un = document.getElementById('item-un').value;
+            let total = un === "Gramas" ? (p.Preco / 1000) * qtd : p.Preco * qtd;
+
+            itensSelecionados.push({
+                id: p.ID,
+                nome: p.Nome,
+                qtd: qtd,
+                un: un,
+                preco: p.Preco,
+                total: total.toFixed(2)
+            });
+
+            atualizarTabela();
+        }
+
+        function removerItem(index) {
+            itensSelecionados.splice(index, 1);
+            atualizarTabela();
+        }
+
+        function atualizarTabela() {
+            const tbody = document.querySelector('#tabela-orcamento tbody');
+            tbody.innerHTML = '';
+            itensSelecionados.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.nome}</td>
+                    <td>${item.qtd}</td>
+                    <td>${item.un}</td>
+                    <td>R$ ${parseFloat(item.preco).toFixed(2)}</td>
+                    <td>R$ ${parseFloat(item.total).toFixed(2)}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="removerItem(${index})">Remover</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+            calcularTotalGeral();
+        }
+
+        function calcularTotalGeral() {
+            let subtotal = itensSelecionados.reduce((acc, item) => acc + parseFloat(item.total), 0);
+            const desconto = parseFloat(document.getElementById('orc-desc').value) || 0;
+            let total = subtotal * (1 - (desconto / 100));
+            document.getElementById('total-geral-txt').innerText = `TOTAL: R$ ${total.toFixed(2)}`;
+        }
+
+        function gerarPDF() {
+            const payload = {
+                emitente: {
+                    nome: document.getElementById('emp-nome').value,
+                    cnpj: document.getElementById('emp-cnpj').value,
+                    tel: document.getElementById('emp-tel').value
+                },
+                cliente: {
+                    nome: document.getElementById('cli-nome').value,
+                    cnpj: document.getElementById('cli-cnpj').value,
+                    tel: document.getElementById('cli-tel').value
+                },
+                itens: itensSelecionados,
+                desconto: document.getElementById('orc-desc').value,
+                obs: document.getElementById('orc-obs').value
+            };
+
+            fetch('/api/gerar_pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(res => res.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `Orcamento_${payload.cliente.nome || 'Cliente'}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                });
+        }
+    </script>
+</body>
+
+</html>
