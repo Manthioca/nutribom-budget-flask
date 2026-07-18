@@ -332,7 +332,14 @@
                 const novosProdutos = [];
 
                 linhas.forEach(linha => {
-                    const partes = linha.split('|');
+                    if (!linha.trim()) return; // pula linhas vazias
+
+                    // Tenta dividir por pipe (|). Se não achar pelo menos 4 colunas, divide por ponto e vírgula (;)
+                    let partes = linha.split('|');
+                    if (partes.length < 4) {
+                        partes = linha.split(';');
+                    }
+
                     if (partes.length >= 4) {
                         novosProdutos.push({
                             id: partes[0].trim(),
@@ -347,8 +354,12 @@
                     produtosImportados = novosProdutos;
                     localStorage.setItem('produtos_nutribom', JSON.stringify(produtosImportados));
                     alert(`Sucesso! ${produtosImportados.length} produtos injetados localmente.`);
+
+                    // Limpa o campo de busca e recarrega caso queira testar na hora
+                    document.getElementById('campoBusca').value = "";
+                    document.getElementById('listaBusca').innerHTML = '<tr><td colspan="4" class="text-center text-muted py-3 small">Use a barra acima para pesquisar.</td></tr>';
                 } else {
-                    alert("Estrutura incompatível detectada no arquivo.");
+                    alert("Estrutura incompatível. Certifique-se de que o arquivo usa '|' ou ';' para separar as colunas.");
                 }
             };
             leitor.readAsText(fileInput.files[0], 'ISO-8859-1');
