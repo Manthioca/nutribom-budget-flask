@@ -4,121 +4,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Orçamentos — Nutribom</title>
-    <!-- Bootstrap 5 & Google Fonts para um visual moderno -->
+    <title>Nutribom Alimentos — Painel de Orçamentos</title>
+    <!-- Bootstrap 5 & Fontes Premium para Identidade Institucional -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
          :root {
-            --bg-principal: #f8fafc;
-            --cor-primaria: #1e293b;
-            --cor-secundaria: #0f172a;
-            --card-bg: #ffffff;
-            --borda: #e2e8f0;
-            --texto-principal: #334155;
-            --texto-mutado: #64748b;
+            --bg-sistema: #f4f7f6;
+            --nutribom-verde: #10b981;
+            /* Verde Nutribom / Alimentação Saudável */
+            --nutribom-verde-escuro: #065f46;
+            --texto-titulo: #0f172a;
+            --texto-corpo: #334155;
+            --borda-suave: #e2e8f0;
+            --card-sombra: 0 4px 20px -2px rgba(16, 185, 129, 0.05), 0 2px 8px -1px rgba(0, 0, 0, 0.03);
         }
         
         body {
-            background-color: var(--bg-principal);
-            font-family: 'Inter', sans-serif;
-            color: var(--texto-principal);
+            background-color: var(--bg-sistema);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--texto-corpo);
             -webkit-font-smoothing: antialiased;
         }
-        /* Barra de Administrador Fina e Moderna */
+        /* Topo Institucional Nutribom */
+        
+        .marca-topo {
+            background: linear-gradient(135deg, var(--nutribom-verde-escuro) 0%, #022c22 100%);
+            color: #ffffff;
+            padding: 30px 0;
+            margin-bottom: 40px;
+            border-bottom: 4px solid var(--nutribom-verde);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        /* Barra de Administrador de Preços */
         
         .barra-admin {
-            background-color: #fef08a;
-            color: #713f12;
-            font-weight: 500;
+            background-color: #ecfdf5;
+            color: var(--nutribom-verde-escuro);
+            font-weight: 600;
             font-size: 0.9rem;
-            padding: 10px;
-            text-align: center;
-            border-bottom: 1px solid #fef08a;
-            box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+            padding: 12px;
+            border-bottom: 1px solid #a7f3d0;
         }
-        /* Estilização Geral dos Cards */
+        /* Cards do Sistema */
         
         .card {
-            border: 1px solid var(--borda);
-            border-radius: 12px;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
-            background-color: var(--card-bg);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid var(--borda-suave);
+            border-radius: 16px;
+            box-shadow: var(--card-sombra);
+            background-color: #ffffff;
         }
-        /* Inputs e Formulários Personalizados */
+        
+        .card-titulo {
+            color: var(--texto-titulo);
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--borda-suave);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        /* Formulários e Inputs Modernos */
         
         .form-control,
         .form-select {
-            border: 1px solid var(--borda);
-            border-radius: 8px;
+            border: 1.5px solid var(--borda-suave);
+            border-radius: 10px;
             padding: 10px 14px;
             font-size: 0.95rem;
-            color: var(--texto-principal);
+            font-weight: 500;
+            color: var(--texto-titulo);
+            background-color: #f8fafc;
         }
         
         .form-control:focus,
         .form-select:focus {
-            border-color: #94a3b8;
-            box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.15);
+            border-color: var(--nutribom-verde);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
         }
-        /* Botões */
+        /* Botões Nutribom */
         
         .btn-primary {
-            background-color: var(--cor-primaria);
+            background-color: var(--nutribom-verde);
             border: none;
-            font-weight: 500;
-            padding: 10px 20px;
-            border-radius: 8px;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 10px;
+            transition: all 0.2s ease;
         }
         
         .btn-primary:hover {
-            background-color: var(--cor-secundaria);
+            background-color: #059669;
+            transform: translateY(-1px);
         }
         
-        .btn-lg {
-            padding: 14px 28px;
-            font-size: 1.05rem;
+        .btn-secondary {
+            background-color: #475569;
+            border: none;
             border-radius: 10px;
         }
-        /* Tabelas Limpas */
         
-        .table-custom {
-            font-size: 0.95rem;
+        .btn-secondary:hover {
+            background-color: #334155;
         }
+        /* Tabelas Avançadas */
         
         .table-custom th {
-            background-color: #f1f5f9;
-            color: #475569;
-            font-weight: 600;
+            background-color: #f8fafc;
+            color: #64748b;
+            font-weight: 700;
             text-transform: uppercase;
             font-size: 0.75rem;
-            letter-spacing: 0.05em;
-            padding: 14px;
-            border-bottom: 2px solid var(--borda);
+            letter-spacing: 0.06em;
+            padding: 16px;
+            border-bottom: 2px solid var(--borda-suave);
         }
         
         .table-custom td {
-            padding: 14px;
+            padding: 16px;
             vertical-align: middle;
-            border-bottom: 1px solid var(--borda);
+            border-bottom: 1px solid var(--borda-suave);
         }
-        /* Caixa de Resultados de Pesquisa Instantânea */
         
         .container-pesquisa {
-            max-height: 250px;
+            max-height: 280px;
             overflow-y: auto;
-            border: 1px solid var(--borda);
-            border-radius: 8px;
+            border: 1px solid var(--borda-suave);
+            border-radius: 12px;
             background: #ffffff;
         }
-        /* Resumo de Valores */
+        /* Quadro de Valores do Orçamento */
         
         .resumo-card {
-            background-color: #f8fafc;
-            border-radius: 10px;
-            padding: 20px;
-            border: 1px solid var(--borda);
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 24px;
+            border: 1px solid var(--borda-suave);
+        }
+        /* Inputs Curtos de Quantidade na Tabela */
+        
+        .input-qtd-grupo {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            max-width: 170px;
         }
     </style>
 </head>
@@ -128,149 +160,152 @@
     <!-- BARRA ADMIN -->
     <div id="barraAdmin" class="barra-admin d-none">
         <div class="container d-flex flex-wrap align-items-center justify-content-center gap-2">
-            <span>🔧 <strong>Modo Administrador:</strong> Importar nova tabela de preços (.txt):</span>
+            <span>🍏 <strong>Painel de Preços Nutribom:</strong> Enviar nova tabela operacional (.txt):</span>
             <input type="file" id="arquivoTxt" class="form-control form-control-sm d-inline-block w-auto" accept=".txt">
-            <button class="btn btn-dark btn-sm px-3" onclick="importarTabela()">Atualizar Banco de Dados</button>
+            <button class="btn btn-success btn-sm px-3 fw-bold" onclick="importarTabela()">Atualizar Banco</button>
         </div>
     </div>
 
     <!-- TELA DE LOGIN -->
-    <div id="telaLogin" class="container" style="margin-top: 10vh;">
+    <div id="telaLogin" class="container" style="margin-top: 12vh;">
         <div class="row justify-content-center">
-            <div class="col-10 col-sm-8 col-md-6 col-lg-4">
+            <div class="col-11 col-sm-8 col-md-6 col-lg-4">
                 <div class="text-center mb-4">
-                    <h2 class="fw-bold text-dark">NUTRIBOM</h2>
-                    <p class="text-secondary small">Painel de Vendas & Orçamentos</p>
+                    <h2 class="fw-bold text-success m-0" style="letter-spacing: -1px;">NUTRIBOM</h2>
+                    <p class="text-muted small">Sistema de Emissão de Orçamentos</p>
                 </div>
                 <div class="card p-4">
                     <div class="mb-3">
-                        <label class="form-label small fw-medium text-secondary">Usuário</label>
-                        <input type="text" id="usuario" class="form-control" placeholder="Seu usuário">
+                        <label class="form-label small fw-bold text-secondary">Usuário Integrado</label>
+                        <input type="text" id="usuario" class="form-control" placeholder="Ex: nutribom">
                     </div>
                     <div class="mb-4">
-                        <label class="form-label small fw-medium text-secondary">Senha</label>
+                        <label class="form-label small fw-bold text-secondary">Senha Operacional</label>
                         <input type="password" id="senha" class="form-control" placeholder="••••••••">
                     </div>
-                    <button class="btn btn-primary w-100 py-2" onclick="fazerLogin()">Entrar no Sistema</button>
+                    <button class="btn btn-primary w-100 py-2.5" onclick="fazerLogin()">Acessar Painel</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- PAINEL PRINCIPAL DO SISTEMA -->
-    <div id="painelSistema" class="container my-5 d-none">
-        <!-- Topo da Página -->
-        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 pb-4 mb-4 border-bottom">
-            <div>
-                <h1 class="h2 fw-bold text-dark m-0">Novo Orçamento</h1>
-                <p class="text-muted small m-0">Preencha os dados e gere o documento oficial em PDF instantaneamente.</p>
-            </div>
-            <button class="btn btn-outline-danger btn-sm px-3 alignment-self-start" onclick="logout()">Sair do Painel</button>
-        </div>
+    <div id="painelSistema" class="d-none">
 
-        <div class="row g-4">
-            <!-- Coluna 1: Dados do Cliente -->
-            <div class="col-lg-5">
-                <div class="card p-4 h-100">
-                    <h5 class="fw-bold mb-4 text-dark">1. Dados do Cliente</h5>
-                    <div class="mb-3">
-                        <label class="form-label small fw-medium text-secondary">Nome / Razão Social</label>
-                        <input type="text" id="cliNome" class="form-control" placeholder="Ex: Comercial de Alimentos Silva">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-medium text-secondary">CNPJ / CPF</label>
-                        <input type="text" id="cliCnpj" class="form-control" placeholder="00.000.000/0001-00">
-                    </div>
-                    <div class="mb-0">
-                        <label class="form-label small fw-medium text-secondary">Telefone / WhatsApp</label>
-                        <input type="text" id="cliTel" class="form-control" placeholder="(44) 99999-9999">
-                    </div>
+        <!-- CABEÇALHO NUTRIBOM -->
+        <div class="marca-topo">
+            <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+                <div>
+                    <h1 class="h3 fw-bold m-0 text-white">Nutribom Alimentos Ltda</h1>
+                    <p class="m-0 text-white-50 small">Unidade Comercial & Distribuição de Alimentos</p>
                 </div>
-            </div>
-
-            <!-- Coluna 2: Adicionar Itens -->
-            <div class="col-lg-7">
-                <div class="card p-4 h-100">
-                    <h5 class="fw-bold mb-3 text-dark">2. Buscar e Inserir Produtos</h5>
-                    <p class="text-muted small mb-3">Pesquise por código ou nome do item cadastrado na planilha de preços.</p>
-
-                    <div class="input-group mb-3">
-                        <input type="text" id="campoBusca" class="form-control" placeholder="Digite o código ou nome do produto..." onkeyup="if(event.key === 'Enter') buscarProdutos()">
-                        <button class="btn btn-secondary px-4" type="button" onclick="buscarProdutos()">Buscar</button>
-                    </div>
-
-                    <div class="container-pesquisa">
-                        <table class="table table-hover align-middle mb-0" style="font-size: 0.9rem;">
-                            <thead class="table-light sticky-top">
-                                <tr>
-                                    <th class="py-2" style="font-size: 0.7rem;">Cód.</th>
-                                    <th class="py-2" style="font-size: 0.7rem;">Descrição</th>
-                                    <th class="py-2" style="font-size: 0.7rem;">Preço</th>
-                                    <th class="py-2 text-center" style="font-size: 0.7rem; width: 60px;">Ação</th>
-                                </tr>
-                            </thead>
-                            <tbody id="listaBusca">
-                                <tr>
-                                    <td colspan="4" class="text-center text-muted py-4 small">Use a barra acima para pesquisar.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <button class="btn btn-sm btn-outline-light px-3 opacity-75" onclick="logout()">Desconectar</button>
             </div>
         </div>
 
-        <!-- Bloco de Itens Adicionados -->
-        <div class="card p-4 mt-4">
-            <h5 class="fw-bold mb-4 text-dark">3. Itens do Orçamento Comercial</h5>
-            <div class="table-responsive">
-                <table class="table table-custom align-middle">
-                    <thead>
-                        <tr>
-                            <th style="width: 100px;">Código</th>
-                            <th>Descrição do Produto</th>
-                            <th style="width: 130px;">Quantidade</th>
-                            <th style="width: 90px;">Unidade</th>
-                            <th style="width: 140px;" class="text-end">Preço Unit.</th>
-                            <th style="width: 140px;" class="text-end">Total Geral</th>
-                            <th style="width: 80px;" class="text-center">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="corpoTabela">
-                        <tr>
-                            <td colspan="7" class="text-center text-muted py-4">Nenhum produto adicionado ao orçamento ainda.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Rodapé com Observações e Fechamento Financeiro -->
-            <div class="row g-4 mt-3 pt-3 border-top">
-                <div class="col-md-6">
-                    <label class="form-label small fw-medium text-secondary">Observações / Termos Adicionais</label>
-                    <textarea id="obs" class="form-control" rows="4" placeholder="Ex: Condições de pagamento (Boleto/PIX), prazo de entrega ou validade desta proposta..."></textarea>
-                </div>
-                <div class="col-md-6 col-lg-5 ms-auto">
-                    <div class="resumo-card">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <label class="small fw-medium text-secondary m-0">Aplicar Desconto (%):</label>
-                            <input type="number" id="desconto" class="form-control text-center form-control-sm w-25" value="0" min="0" max="100" onchange="atualizarResumo()">
+        <div class="container">
+            <div class="row g-4">
+                <!-- Coluna 1: Dados do Cliente -->
+                <div class="col-lg-5">
+                    <div class="card p-4 h-100">
+                        <div class="card-titulo">👤 Identificação do Cliente</div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-medium text-secondary">Razão Social / Nome Fantasia</label>
+                            <input type="text" id="cliNome" class="form-control" placeholder="Ex: Supermercado Alvorada">
                         </div>
-                        <hr class="my-2 opacity-50">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-secondary small">Subtotal bruto:</span>
-                            <span class="fw-medium text-dark" id="resumoSubtotal">R$ 0,00</span>
+                        <div class="mb-3">
+                            <label class="form-label small fw-medium text-secondary">CNPJ ou CPF do Cliente</label>
+                            <input type="text" id="cliCnpj" class="form-control" placeholder="00.000.000/0001-00">
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="text-danger small">Desconto concedido:</span>
-                            <span class="fw-medium text-danger" id="resumoDesconto">- R$ 0,00</span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                            <span class="fw-bold text-dark">Valor Total Final:</span>
-                            <span class="h4 fw-bold text-success m-0" id="resumoTotal">R$ 0,00</span>
+                        <div class="mb-0">
+                            <label class="form-label small fw-medium text-secondary">Telefone / WhatsApp Comercial</label>
+                            <input type="text" id="cliTel" class="form-control" placeholder="(44) 3031-9321">
                         </div>
                     </div>
-                    <button class="btn btn-primary btn-lg w-100 mt-4 shadow-sm" onclick="gerarPDF()">Criar e Enviar PDF Oficial 📄</button>
+                </div>
+
+                <!-- Coluna 2: Adicionar Itens -->
+                <div class="col-lg-7">
+                    <div class="card p-4 h-100">
+                        <div class="card-titulo">🔍 Catálogo de Produtos Alimentícios</div>
+
+                        <div class="input-group mb-3">
+                            <input type="text" id="campoBusca" class="form-control" placeholder="Busque por código do item ou descrição..." onkeyup="if(event.key === 'Enter') buscarProdutos()">
+                            <button class="btn btn-secondary px-4" type="button" onclick="buscarProdutos()">Pesquisar</button>
+                        </div>
+
+                        <div class="container-pesquisa">
+                            <table class="table table-hover align-middle mb-0" style="font-size: 0.9rem;">
+                                <thead class="table-light sticky-top">
+                                    <tr>
+                                        <th class="py-2">Cód.</th>
+                                        <th class="py-2">Descrição Nutribom</th>
+                                        <th class="py-2">Preço Base</th>
+                                        <th class="py-2 text-center" style="width: 70px;">Incluir</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaBusca">
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted py-4 small">Digite o termo desejado acima.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Orçamentos -->
+            <div class="card p-4 mt-4">
+                <div class="card-titulo">📊 Estrutura de Itens do Orçamento</div>
+                <div class="table-responsive">
+                    <table class="table table-custom align-middle">
+                        <thead>
+                            <tr>
+                                <th style="width: 90px;">Código</th>
+                                <th>Descrição Completa do Item</th>
+                                <th style="width: 190px;">Quantidade do Pedido</th>
+                                <th style="width: 130px;" class="text-end">Preço Unitário</th>
+                                <th style="width: 140px;" class="text-end">Total Bruto</th>
+                                <th style="width: 70px;" class="text-center">Excluir</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpoTabela">
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-5">Nenhum produto selecionado até o momento.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Caixa de Resumo e Botão Gerador -->
+                <div class="row g-4 mt-3 pt-3 border-top">
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold text-secondary">Termos, Prazos ou Observações</label>
+                        <textarea id="obs" class="form-control" rows="4" placeholder="Ex: Condições normais de entrega, parcelamento ou prazos de validade da proposta de preços..."></textarea>
+                    </div>
+                    <div class="col-md-6 col-lg-5 ms-auto">
+                        <div class="resumo-card">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <label class="small fw-bold text-secondary m-0">Conceder Desconto (%):</label>
+                                <input type="number" id="desconto" class="form-control text-center form-control-sm w-25" value="0" min="0" max="100" onchange="atualizarResumo()">
+                            </div>
+                            <hr class="my-2 opacity-50">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-secondary small">Subtotal Geral:</span>
+                                <span class="fw-medium text-dark" id="resumoSubtotal">R$ 0,00</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-danger small">Desconto Aplicado:</span>
+                                <span class="fw-medium text-danger" id="resumoDesconto">- R$ 0,00</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                <span class="fw-bold text-dark">VALOR FINAL LÍQUIDO:</span>
+                                <span class="h4 fw-bold text-success m-0" id="resumoTotal">R$ 0,00</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-lg w-100 mt-4 shadow" onclick="gerarPDF()">Emitir PDF e Fechar Orçamento 📄</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -312,7 +347,7 @@
                     } else {
                         alert(dados.mensagem);
                     }
-                }).catch(() => alert("Erro ao estabelecer conexão segura."));
+                }).catch(() => alert("Erro ao autenticar."));
         }
 
         function logout() {
@@ -333,32 +368,21 @@
 
                 linhas.forEach(linha => {
                     if (!linha.trim()) return;
-
-                    // Divide usando pipe ou ponto e vírgula
                     let partes = linha.split('|');
-                    if (partes.length < 3) {
-                        partes = linha.split(';');
-                    }
+                    if (partes.length < 3) partes = linha.split(';');
 
                     if (partes.length >= 3) {
-                        // Remove espaços extras de todas as colunas
                         partes = partes.map(p => p.trim());
-
                         const id = partes[0];
-
-                        // Descobre qual coluna é a unidade (geralmente tem 2 letras como UN, KG, FD, CX)
                         let idxUn = partes.findIndex((p, idx) => idx > 0 && p.length <= 3 && isNaN(p));
 
                         let nome = "";
-                        let un = "UN";
+                        let un = "KG";
                         let preco = 0;
 
                         if (idxUn !== -1) {
-                            // Se achou a unidade, o nome é o que está antes dela
                             nome = partes.slice(1, idxUn).join(' ');
                             un = partes[idxUn];
-
-                            // O preço geralmente vem logo após a unidade ou no final
                             for (let i = idxUn + 1; i < partes.length; i++) {
                                 let valorLimpo = partes[i].replace(/\./g, '').replace(',', '.');
                                 let num = parseFloat(valorLimpo);
@@ -368,26 +392,22 @@
                                 }
                             }
                         } else {
-                            // Caso não ache uma unidade clara, tenta pegar a última coluna populada com número para o preço
                             for (let i = partes.length - 1; i > 0; i--) {
                                 let valorLimpo = partes[i].replace(/\./g, '').replace(',', '.');
                                 let num = parseFloat(valorLimpo);
                                 if (!isNaN(num) && num > 0) {
                                     preco = num;
-                                    partes.splice(i, 1); // remove o preço para isolar o nome
+                                    partes.splice(i, 1);
                                     break;
                                 }
                             }
                             nome = partes.slice(1).join(' ');
                         }
 
-                        // Se o nome ficou vazio ou virou um código de barras longo, reajusta usando a maior string da linha
                         if (!nome || (!isNaN(nome.replace(/\s/g, '')) && nome.length > 8)) {
                             let maiorTexto = "";
                             partes.forEach((p, idx) => {
-                                if (idx > 0 && p.length > maiorTexto.length && isNaN(p.replace(/\s/g, ''))) {
-                                    maiorTexto = p;
-                                }
+                                if (idx > 0 && p.length > maiorTexto.length && isNaN(p.replace(/\s/g, ''))) maiorTexto = p;
                             });
                             if (maiorTexto) nome = maiorTexto;
                         }
@@ -404,12 +424,7 @@
                 if (novosProdutos.length > 0) {
                     produtosImportados = novosProdutos;
                     localStorage.setItem('produtos_nutribom', JSON.stringify(produtosImportados));
-                    alert(`Sucesso! ${produtosImportados.length} produtos injetados com mapeamento inteligente.`);
-
-                    document.getElementById('campoBusca').value = "";
-                    document.getElementById('listaBusca').innerHTML = '<tr><td colspan="4" class="text-center text-muted py-3 small">Use a barra acima para pesquisar.</td></tr>';
-                } else {
-                    alert("Não foi possível processar as colunas do arquivo.");
+                    alert(`Sucesso! ${produtosImportados.length} produtos carregados.`);
                 }
             };
             leitor.readAsText(fileInput.files[0], 'ISO-8859-1');
@@ -434,7 +449,7 @@
             );
 
             if (resultados.length === 0) {
-                lista.innerHTML = '<tr><td colspan="4" class="text-center text-danger py-3 small">Produto inexistente na lista de preços.</td></tr>';
+                lista.innerHTML = '<tr><td colspan="4" class="text-center text-danger py-3 small">Produto não encontrado.</td></tr>';
                 return;
             }
 
@@ -442,9 +457,9 @@
                 lista.innerHTML += `
                     <tr>
                         <td class="fw-bold text-dark">${p.id}</td>
-                        <td class="text-muted small">${p.nome}</td>
-                        <td class="fw-medium text-dark">R$ ${p.preco.toFixed(2)}</td>
-                        <td class="text-center"><button class="btn btn-sm btn-dark px-2 py-1" style="font-size: 0.75rem;" onclick="adicionarAoOrcamento('${p.id}')">Incluir</button></td>
+                        <td class="text-muted small fw-medium">${p.nome}</td>
+                        <td class="fw-bold text-success">R$ ${p.preco.toFixed(2)}</td>
+                        <td class="text-center"><button class="btn btn-sm btn-primary px-3 py-1" onclick="adicionarAoOrcamento('${p.id}')">＋</button></td>
                     </tr>
                 `;
             });
@@ -456,52 +471,49 @@
 
             const existente = itensOrcamento.find(i => i.id === id);
             if (existente) {
-                existente.qtd += 1;
-                existente.total = existente.qtd * existente.preco;
+                existente.valorInput += 1;
+                recalcularItemPorUnidade(existente);
             } else {
-                itensOrcamento.push({
+                let novoItem = {
                     id: prod.id,
                     nome: prod.nome,
-                    un: prod.un,
+                    unFisica: "KG", // Unidade padrão escolhida no slot
+                    valorInput: 1, // Valor digitado pelo usuário
+                    un: "KG", // O que vai impresso no PDF (sempre em KG)
                     preco: prod.preco,
-                    qtd: 1,
+                    qtd: 1, // Quantidade real convertida para KG
                     total: prod.preco
-                });
+                };
+                itensOrcamento.push(novoItem);
             }
             renderizarOrcamento();
         }
 
-        function renderizarOrcamento() {
-            const corpo = document.getElementById('corpoTabela');
-            corpo.innerHTML = "";
-
-            if (itensOrcamento.length === 0) {
-                corpo.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4">Nenhum produto adicionado ao orçamento ainda.</td></tr>';
-                atualizarResumo();
-                return;
+        // Realiza o cálculo inteligente de conversão se for Gramas
+        function recalcularItemPorUnidade(item) {
+            if (item.unFisica === "Gramas") {
+                item.qtd = item.valorInput / 1000; // Converte 500g -> 0.500 KG
+            } else {
+                item.qtd = item.valorInput; // Continua em KG normal
             }
+            item.total = item.qtd * item.preco;
+        }
 
-            itensOrcamento.forEach((item, index) => {
-                corpo.innerHTML += `
-                    <tr>
-                        <td class="fw-bold">${item.id}</td>
-                        <td class="text-secondary small fw-medium">${item.nome}</td>
-                        <td><input type="number" class="form-control form-control-sm text-center fw-medium" value="${item.qtd}" min="0.001" step="any" onchange="atualizarQuantidade(${index}, this.value)"></td>
-                        <td><span class="badge bg-light text-dark border px-2 py-1.5">${item.un}</span></td>
-                        <td class="text-end fw-medium">R$ ${item.preco.toFixed(2)}</td>
-                        <td class="text-end fw-bold text-dark">R$ ${item.total.toFixed(2)}</td>
-                        <td class="text-center"><button class="btn btn-outline-danger btn-sm px-2 py-0.5" style="font-size: 0.8rem;" onclick="removerItem(${index})">&times;</button></td>
-                    </tr>
-                `;
-            });
-            atualizarResumo();
+        function mudarUnidadeMedida(index, novaUnidade) {
+            itensOrcamento[index].unFisica = novaUnidade;
+            recalcularItemPorUnidade(itensOrcamento[index]);
+            renderizarOrcamento();
         }
 
         function atualizarQuantidade(index, valor) {
-            const qtd = parseFloat(valor) || 0;
-            itensOrcamento[index].qtd = qtd;
-            itensOrcamento[index].total = qtd * itensOrcamento[index].preco;
-            renderizarOrcamento();
+            const num = parseFloat(valor) || 0;
+            itensOrcamento[index].valorInput = num;
+            recalcularItemPorUnidade(itensOrcamento[index]);
+
+            // Renderiza apenas os valores calculados na linha para evitar perder o foco do input
+            const subtotal = itensOrcamento[index].qtd * itensOrcamento[index].preco;
+            document.getElementById(`total-item-${index}`).innerText = `R$ ${subtotal.toFixed(2)}`;
+            atualizarResumo();
         }
 
         function removerItem(index) {
@@ -520,10 +532,47 @@
             document.getElementById('resumoTotal').innerText = `R$ ${total.toFixed(2)}`;
         }
 
+        function renderizarOrcamento() {
+            const corpo = document.getElementById('corpoTabela');
+            corpo.innerHTML = "";
+
+            if (itensOrcamento.length === 0) {
+                corpo.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-5">Nenhum produto selecionado até o momento.</td></tr>';
+                atualizarResumo();
+                return;
+            }
+
+            itensOrcamento.forEach((item, index) => {
+                const isKg = item.unFisica === "KG";
+                const isGramas = item.unFisica === "Gramas";
+
+                corpo.innerHTML += `
+                    <tr>
+                        <td class="fw-bold text-secondary">${item.id}</td>
+                        <td class="text-dark small fw-semibold">${item.nome}</td>
+                        <td>
+                            <div class="input-qtd-grupo">
+                                <input type="number" class="form-control form-control-sm text-center fw-bold" value="${item.valorInput}" min="0.001" step="any" oninput="atualizarQuantidade(${index}, this.value)">
+                                <select class="form-select form-select-sm fw-bold" style="width: 85px;" onchange="mudarUnidadeMedida(${index}, this.value)">
+                                    <option value="KG" ${isKg ? 'selected' : ''}>KG</option>
+                                    <option value="Gramas" ${isGramas ? 'selected' : ''}>Gramas</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td class="text-center"><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-20 px-2 py-1.5 fw-bold">KG</span></td>
+                        <td class="text-end fw-medium">R$ ${item.preco.toFixed(2)}</td>
+                        <td class="text-end fw-bold text-dark" id="total-item-${index}">R$ ${item.total.toFixed(2)}</td>
+                        <td class="text-center"><button class="btn btn-link text-danger p-0 border-0 fs-5" onclick="removerItem(${index})">&times;</button></td>
+                    </tr>
+                `;
+            });
+            atualizarResumo();
+        }
+
         function gerarPDF() {
             const cliNome = document.getElementById('cliNome').value.trim();
-            if (!cliNome) return alert("Preencha o Nome/Razão Social do Cliente para continuar.");
-            if (itensOrcamento.length === 0) return alert("Seu orçamento precisa ter pelo menos 1 produto.");
+            if (!cliNome) return alert("Preencha o Nome/Razão Social do Cliente.");
+            if (itensOrcamento.length === 0) return alert("Adicione pelo menos 1 produto.");
 
             const dados = {
                 emitente: {
@@ -550,7 +599,7 @@
                 })
                 .then(res => {
                     if (res.ok) return res.blob();
-                    throw new Error("Resposta inesperada do motor de PDFs do servidor.");
+                    throw new Error("Erro no motor de PDFs.");
                 })
                 .then(blob => {
                     const url = window.URL.createObjectURL(blob);
@@ -561,7 +610,7 @@
                     a.click();
                     a.remove();
                 })
-                .catch(err => alert("Falha na geração do arquivo PDF: " + err.message));
+                .catch(err => alert("Falha na geração do PDF: " + err.message));
         }
     </script>
 </body>
