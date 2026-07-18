@@ -332,20 +332,71 @@
                 const novosProdutos = [];
 
                 linhas.forEach(linha => {
-                    if (!linha.trim()) return; // pula linhas vazias
+                    if (!linha.trim()) return;
 
-                    // Tenta dividir por pipe (|). Se não achar pelo menos 4 colunas, divide por ponto e vírgula (;)
+                    // Divide usando pipe ou ponto e vírgula
                     let partes = linha.split('|');
-                    if (partes.length < 4) {
+                    if (partes.length < 3) {
                         partes = linha.split(';');
                     }
 
-                    if (partes.length >= 4) {
+                    if (partes.length >= 3) {
+                        // Remove espaços extras de todas as colunas
+                        partes = partes.map(p => p.trim());
+
+                        const id = partes[0];
+
+                        // Descobre qual coluna é a unidade (geralmente tem 2 letras como UN, KG, FD, CX)
+                        let idxUn = partes.findIndex((p, idx) => idx > 0 && p.length <= 3 && isNaN(p));
+
+                        let nome = "";
+                        let un = "UN";
+                        let preco = 0;
+
+                        if (idxUn !== -1) {
+                            // Se achou a unidade, o nome é o que está antes dela
+                            nome = partes.slice(1, idxUn).join(' ');
+                            un = partes[idxUn];
+
+                            // O preço geralmente vem logo após a unidade ou no final
+                            for (let i = idxUn + 1; i < partes.length; i++) {
+                                let valorLimpo = partes[i].replace(/\./g, '').replace(',', '.');
+                                let num = parseFloat(valorLimpo);
+                                if (!isNaN(num) && num > 0) {
+                                    preco = num;
+                                    break;
+                                }
+                            }
+                        } else {
+                            // Caso não ache uma unidade clara, tenta pegar a última coluna populada com número para o preço
+                            for (let i = partes.length - 1; i > 0; i--) {
+                                let valorLimpo = partes[i].replace(/\./g, '').replace(',', '.');
+                                let num = parseFloat(valorLimpo);
+                                if (!isNaN(num) && num > 0) {
+                                    preco = num;
+                                    partes.splice(i, 1); // remove o preço para isolar o nome
+                                    break;
+                                }
+                            }
+                            nome = partes.slice(1).join(' ');
+                        }
+
+                        // Se o nome ficou vazio ou virou um código de barras longo, reajusta usando a maior string da linha
+                        if (!nome || (!isNaN(nome.replace(/\s/g, '')) && nome.length > 8)) {
+                            let maiorTexto = "";
+                            partes.forEach((p, idx) => {
+                                if (idx > 0 && p.length > maiorTexto.length && isNaN(p.replace(/\s/g, ''))) {
+                                    maiorTexto = p;
+                                }
+                            });
+                            if (maiorTexto) nome = maiorTexto;
+                        }
+
                         novosProdutos.push({
-                            id: partes[0].trim(),
-                            nome: partes[1].trim(),
-                            un: partes[2].trim(),
-                            preco: parseFloat(partes[3].replace(',', '.')) || 0
+                            id,
+                            nome,
+                            un,
+                            preco
                         });
                     }
                 });
@@ -353,13 +404,12 @@
                 if (novosProdutos.length > 0) {
                     produtosImportados = novosProdutos;
                     localStorage.setItem('produtos_nutribom', JSON.stringify(produtosImportados));
-                    alert(`Sucesso! ${produtosImportados.length} produtos injetados localmente.`);
+                    alert(`Sucesso! ${produtosImportados.length} produtos injetados com mapeamento inteligente.`);
 
-                    // Limpa o campo de busca e recarrega caso queira testar na hora
                     document.getElementById('campoBusca').value = "";
                     document.getElementById('listaBusca').innerHTML = '<tr><td colspan="4" class="text-center text-muted py-3 small">Use a barra acima para pesquisar.</td></tr>';
                 } else {
-                    alert("Estrutura incompatível. Certifique-se de que o arquivo usa '|' ou ';' para separar as colunas.");
+                    alert("Não foi possível processar as colunas do arquivo.");
                 }
             };
             leitor.readAsText(fileInput.files[0], 'ISO-8859-1');
